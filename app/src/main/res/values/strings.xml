@@ -3,4 +3,7 @@
     <string name="android">Android</string>
     <string name="search">Search</string>
     <string name="setting">Setting</string>
+    <string name="text">text</string>
+    <string name="error">error</string>
+    <string name="finished">load finished</string>
 </resources>

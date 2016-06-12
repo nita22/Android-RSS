@@ -3,4 +3,7 @@
     <string name="android">Android</string>
     <string name="search">搜索</string>
     <string name="setting">设置</string>
+    <string name="text">文本</string>
+    <string name="error">无法加载内容</string>
+    <string name="finished">加载完成</string>
 </resources>

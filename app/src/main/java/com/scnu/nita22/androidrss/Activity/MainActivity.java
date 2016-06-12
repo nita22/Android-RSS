@@ -1,13 +1,27 @@
-package com.scnu.nita22.androidrss;
+package com.scnu.nita22.androidrss.Activity;
 
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
+import com.scnu.nita22.androidrss.Fragment.AndroidFragment;
+import com.scnu.nita22.androidrss.R;
 
+import static com.scnu.nita22.androidrss.R.id.bar_android;
+import static com.scnu.nita22.androidrss.R.id.bar_search;
+import static com.scnu.nita22.androidrss.R.id.bar_setting;
+
+/**
+ * Created by nita22 on 2016/6/12.
+ */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,12 +31,21 @@ public class MainActivity extends AppCompatActivity {
     private static final String BOTTOM_ITEM_TITLE_ANDROID = "Android";
     private static final String BOTTOM_ITEM_TITLE_SEARCH = "搜索";
     private static final String BOTTOM_ITEM_TITLE_SETTING = "设置";
+
     private BottomBar mBottomBar;
+    private CoordinatorLayout mCoordinatorLayout;
+    private NestedScrollView mNestedScrollView;
+
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mFragmentManager = getSupportFragmentManager();
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.container);
+        mNestedScrollView = (NestedScrollView) findViewById(R.id.scroll_view);
+
         initBottomBar(savedInstanceState);
     }
 
@@ -35,11 +58,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 switch (menuItemId) {
-                    case BOTTOM_ITEM_TITLE_ANDROID_INDEX:
+                    case bar_android:
+                        changeFragment(BOTTOM_ITEM_TITLE_ANDROID_INDEX);
                         break;
-                    case BOTTOM_ITEM_TITLE_SEARCH_INDEX:
+                    case bar_search:
+                        changeFragment(BOTTOM_ITEM_TITLE_SEARCH_INDEX);
                         break;
-                    case BOTTOM_ITEM_TITLE_SETTING_INDEX:
+                    case bar_setting:
+                        changeFragment(BOTTOM_ITEM_TITLE_SETTING_INDEX);
                         break;
                     default:
                         break;
@@ -49,11 +75,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
                 switch (menuItemId) {
-                    case BOTTOM_ITEM_TITLE_ANDROID_INDEX:
+                    case bar_android:
                         break;
-                    case BOTTOM_ITEM_TITLE_SEARCH_INDEX:
+                    case bar_search:
                         break;
-                    case BOTTOM_ITEM_TITLE_SETTING_INDEX:
+                    case bar_setting:
                         break;
                     default:
                         break;
@@ -64,6 +90,35 @@ public class MainActivity extends AppCompatActivity {
         mBottomBar.mapColorForTab(BOTTOM_ITEM_TITLE_SEARCH_INDEX, ContextCompat.getColor(this, R.color.colorPrimaryDark));
         mBottomBar.mapColorForTab(BOTTOM_ITEM_TITLE_SETTING_INDEX, ContextCompat.getColor(this, R.color.colorAccent));
         mBottomBar.setActiveTabColor("#009688");
+    }
+
+    private void changeFragment(int i) {
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        switch (i) {
+            case BOTTOM_ITEM_TITLE_ANDROID_INDEX:
+                fragmentTransaction.add(R.id.fragment_container, getFragment(BOTTOM_ITEM_TITLE_ANDROID_INDEX));
+                break;
+            case BOTTOM_ITEM_TITLE_SEARCH_INDEX:
+                break;
+            case BOTTOM_ITEM_TITLE_SETTING_INDEX:
+                break;
+        }
+        fragmentTransaction.commit();
+    }
+
+    private Fragment getFragment(int i) {
+
+        switch (i) {
+            case BOTTOM_ITEM_TITLE_ANDROID_INDEX:
+                return new AndroidFragment();
+            case BOTTOM_ITEM_TITLE_SEARCH_INDEX:
+                break;
+            case BOTTOM_ITEM_TITLE_SETTING_INDEX:
+                break;
+            default:
+                break;
+        }
+        return null;
     }
 
     @Override
