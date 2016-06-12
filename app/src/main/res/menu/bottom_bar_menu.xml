@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bar_android"
+        android:icon="@drawable/ic_android_white_24dp"
+        android:title="@string/android"/>
+
+    <item
+        android:id="@+id/bar_search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/search"/>
+
+    <item
+        android:id="@+id/bar_setting"
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:title="@string/setting"/>
+
+</menu>
