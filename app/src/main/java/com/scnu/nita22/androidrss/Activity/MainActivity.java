@@ -2,12 +2,10 @@ package com.scnu.nita22.androidrss.Activity;
 
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 
 import com.roughike.bottombar.BottomBar;
@@ -28,23 +26,20 @@ public class MainActivity extends AppCompatActivity {
     private static final int BOTTOM_ITEM_TITLE_ANDROID_INDEX = 0;
     private static final int BOTTOM_ITEM_TITLE_SEARCH_INDEX = 1;
     private static final int BOTTOM_ITEM_TITLE_SETTING_INDEX = 2;
-    private static final String BOTTOM_ITEM_TITLE_ANDROID = "Android";
-    private static final String BOTTOM_ITEM_TITLE_SEARCH = "搜索";
-    private static final String BOTTOM_ITEM_TITLE_SETTING = "设置";
+
+    private static int CURRENT_INDEX = 0;
+    private boolean mAndroidFragmentAdded = false;
 
     private BottomBar mBottomBar;
-    private CoordinatorLayout mCoordinatorLayout;
-    private NestedScrollView mNestedScrollView;
 
     private FragmentManager mFragmentManager;
+    private AndroidFragment mAndroidFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mFragmentManager = getSupportFragmentManager();
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.container);
-        mNestedScrollView = (NestedScrollView) findViewById(R.id.scroll_view);
 
         initBottomBar(savedInstanceState);
     }
@@ -94,23 +89,39 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeFragment(int i) {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        switch (i) {
-            case BOTTOM_ITEM_TITLE_ANDROID_INDEX:
-                fragmentTransaction.add(R.id.fragment_container, getFragment(BOTTOM_ITEM_TITLE_ANDROID_INDEX));
-                break;
-            case BOTTOM_ITEM_TITLE_SEARCH_INDEX:
-                break;
-            case BOTTOM_ITEM_TITLE_SETTING_INDEX:
-                break;
+        if (i == CURRENT_INDEX && (!mAndroidFragmentAdded)) {
+            fragmentTransaction.add(R.id.fragment_container, getFragment(BOTTOM_ITEM_TITLE_ANDROID_INDEX));
+            mAndroidFragmentAdded = true;
+            CURRENT_INDEX = BOTTOM_ITEM_TITLE_ANDROID_INDEX;
+        } else {
+            fragmentTransaction.hide(getFragment(CURRENT_INDEX));
+
+            switch (i) {
+                case BOTTOM_ITEM_TITLE_ANDROID_INDEX:
+                    if (mAndroidFragmentAdded) {
+                        fragmentTransaction.show(getFragment(BOTTOM_ITEM_TITLE_ANDROID_INDEX));
+                    } else {
+                        fragmentTransaction.add(R.id.fragment_container, getFragment(BOTTOM_ITEM_TITLE_ANDROID_INDEX));
+                        mAndroidFragmentAdded = true;
+                    }
+                    CURRENT_INDEX = BOTTOM_ITEM_TITLE_ANDROID_INDEX;
+                    break;
+                case BOTTOM_ITEM_TITLE_SEARCH_INDEX:
+                    break;
+                case BOTTOM_ITEM_TITLE_SETTING_INDEX:
+                    break;
+            }
         }
         fragmentTransaction.commit();
     }
 
     private Fragment getFragment(int i) {
-
         switch (i) {
             case BOTTOM_ITEM_TITLE_ANDROID_INDEX:
-                return new AndroidFragment();
+                if (mAndroidFragment == null) {
+                    mAndroidFragment = AndroidFragment.getInstance();
+                }
+                return mAndroidFragment;
             case BOTTOM_ITEM_TITLE_SEARCH_INDEX:
                 break;
             case BOTTOM_ITEM_TITLE_SETTING_INDEX:

@@ -40,17 +40,27 @@ public class AndroidFragment extends Fragment {
     private List<GankData.ResultsBean> mGankDataList;
     private FloatingActionButton refreshFAB;
 
+    public static AndroidFragment mAndroidFragment;
+
+    public static AndroidFragment getInstance() {
+        if (mAndroidFragment == null) {
+            mAndroidFragment = new AndroidFragment();
+        }
+        return mAndroidFragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGankDataList = new ArrayList<GankData.ResultsBean>();
         mRecyclerAdapter = new RecyclerAdapter(getActivity(), mGankDataList);
+        getData(getActivity());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_android, null);
+        View rootView = inflater.inflate(R.layout.fragment_android, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
