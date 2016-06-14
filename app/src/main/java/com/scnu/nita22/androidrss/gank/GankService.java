@@ -1,6 +1,4 @@
-package com.scnu.nita22.androidrss.Interface;
-
-import com.scnu.nita22.androidrss.Model.GankData;
+package com.scnu.nita22.androidrss.gank;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;

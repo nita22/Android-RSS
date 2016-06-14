@@ -1,19 +1,22 @@
-package com.scnu.nita22.androidrss.Activity;
+package com.scnu.nita22.androidrss.gank;
 
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
 
+import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.scnu.nita22.androidrss.R;
 
-public class DetailActivity extends AppCompatActivity {
+public class GankDetailActivity extends AppCompatActivity {
 
-    private CoordinatorLayout mCoordinatorLayout;
+    private RelativeLayout mRelativeLayout;
+    private CircleProgressBar mCircleProgressBar;
     private WebView mWebView;
 
     @Override
@@ -21,7 +24,10 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.detail_container);
+        mRelativeLayout = (RelativeLayout) findViewById(R.id.detail_container);
+        mCircleProgressBar = (CircleProgressBar) findViewById(R.id.detail_progressBar);
+        mCircleProgressBar.setShowArrow(true);
+        mCircleProgressBar.setCircleBackgroundEnabled(true);
         mWebView = (WebView) findViewById(R.id.detail_webview);
 
         initWebview();
@@ -42,8 +48,10 @@ public class DetailActivity extends AppCompatActivity {
                 @Override
                 public void onProgressChanged(WebView view, int newProgress) {
                     super.onProgressChanged(view, newProgress);
+                    mCircleProgressBar.setProgress(newProgress);
                     if (newProgress == 100) {
-                        Snackbar.make(mCoordinatorLayout, R.string.finished, Snackbar.LENGTH_SHORT).show();
+                        mCircleProgressBar.setVisibility(View.GONE);
+                        Snackbar.make(mRelativeLayout, R.string.finished, Snackbar.LENGTH_SHORT).show();
                     }
                 }
 

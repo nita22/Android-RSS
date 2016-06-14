@@ -1,4 +1,4 @@
-package com.scnu.nita22.androidrss.Interface;
+package com.scnu.nita22.androidrss.util;
 
 import android.view.View;
 

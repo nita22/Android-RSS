@@ -1,4 +1,4 @@
-package com.scnu.nita22.androidrss.Model;
+package com.scnu.nita22.androidrss.gank;
 
 import java.util.List;
 

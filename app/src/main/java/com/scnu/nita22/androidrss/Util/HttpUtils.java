@@ -1,4 +1,4 @@
-package com.scnu.nita22.androidrss.Utils;
+package com.scnu.nita22.androidrss.util;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;

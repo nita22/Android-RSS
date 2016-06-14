@@ -1,24 +1,24 @@
-package com.scnu.nita22.androidrss.Adapter;
+package com.scnu.nita22.androidrss.gank;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.scnu.nita22.androidrss.Interface.ItemClickListener;
 import com.scnu.nita22.androidrss.R;
+import com.scnu.nita22.androidrss.util.ItemClickListener;
 
 /**
  * Created by nita22 on 2016/6/12.
  */
 
-public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class GankRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     ItemClickListener mItemClickListener;
     TextView titleText;
     TextView desText;
     TextView dateText;
 
-    public RecyclerViewHolder(View itemView, ItemClickListener itemClickListener) {
+    public GankRecyclerViewHolder(View itemView, ItemClickListener itemClickListener) {
         super(itemView);
 
         mItemClickListener = itemClickListener;

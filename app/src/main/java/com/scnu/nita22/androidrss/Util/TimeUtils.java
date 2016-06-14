@@ -1,4 +1,4 @@
-package com.scnu.nita22.androidrss.Utils;
+package com.scnu.nita22.androidrss.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

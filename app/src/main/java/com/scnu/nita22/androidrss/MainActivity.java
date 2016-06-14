@@ -1,4 +1,4 @@
-package com.scnu.nita22.androidrss.Activity;
+package com.scnu.nita22.androidrss;
 
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -10,8 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
-import com.scnu.nita22.androidrss.Fragment.AndroidFragment;
-import com.scnu.nita22.androidrss.R;
+import com.scnu.nita22.androidrss.gank.GankFragment;
 
 import static com.scnu.nita22.androidrss.R.id.bar_android;
 import static com.scnu.nita22.androidrss.R.id.bar_search;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomBar mBottomBar;
 
     private FragmentManager mFragmentManager;
-    private AndroidFragment mAndroidFragment;
+    private GankFragment mGankFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,10 +117,10 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getFragment(int i) {
         switch (i) {
             case BOTTOM_ITEM_TITLE_ANDROID_INDEX:
-                if (mAndroidFragment == null) {
-                    mAndroidFragment = AndroidFragment.getInstance();
+                if (mGankFragment == null) {
+                    mGankFragment = GankFragment.getInstance();
                 }
-                return mAndroidFragment;
+                return mGankFragment;
             case BOTTOM_ITEM_TITLE_SEARCH_INDEX:
                 break;
             case BOTTOM_ITEM_TITLE_SETTING_INDEX:
