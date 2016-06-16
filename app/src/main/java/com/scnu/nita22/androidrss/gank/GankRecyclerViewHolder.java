@@ -15,15 +15,15 @@ public class GankRecyclerViewHolder extends RecyclerView.ViewHolder implements V
 
     ItemClickListener mItemClickListener;
     TextView titleText;
-    TextView desText;
     TextView dateText;
+    TextView authorText;
 
     public GankRecyclerViewHolder(View itemView, ItemClickListener itemClickListener) {
         super(itemView);
 
         mItemClickListener = itemClickListener;
         titleText = (TextView) itemView.findViewById(R.id.list_item_title);
-        desText = (TextView) itemView.findViewById(R.id.list_item_desc);
+        authorText = (TextView) itemView.findViewById(R.id.list_item_author);
         dateText = (TextView) itemView.findViewById(R.id.list_item_date);
 
         itemView.setOnClickListener(this);

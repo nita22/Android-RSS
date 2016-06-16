@@ -1,4 +1,4 @@
-package com.scnu.nita22.androidrss.gank;
+package com.scnu.nita22.androidrss.weekly;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,51 +22,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by nita22 on 2016/6/12.
+ * Created by nita22 on 2016/6/15.
  */
 
-public class GankFragment extends Fragment implements ItemClickListener, GankContract.GankView {
+public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyView, ItemClickListener {
+
+    private WeeklyContract.WeeklyPresenter mWeeklyPresenter;
+    private List<WeeklyData> mWeeklyDataList;
+    private WeeklyRecyclerAdapter mWeeklyRecyclerAdapter;
 
     private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView mRecyclerView;
-    private GankRecyclerAdapter mGankRecyclerAdapter;
-    private List<GankData.ResultsBean> mGankDataList;
-    private FloatingActionButton refreshFAB;
+    private FloatingActionButton mFloatingActionButton;
 
-    private GankContract.GankPresenter mGankPresenter;
+    public static WeeklyFragment mWeeklyFragment;
 
-    public static GankFragment mGankFragment;
-
-    public static GankFragment getInstance() {
-        if (mGankFragment == null) {
-            mGankFragment = new GankFragment();
+    public static WeeklyFragment getInstance() {
+        if (mWeeklyFragment == null) {
+            mWeeklyFragment = new WeeklyFragment();
         }
-        return mGankFragment;
+        return mWeeklyFragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGankDataList = new ArrayList<GankData.ResultsBean>();
-        mGankRecyclerAdapter = new GankRecyclerAdapter(getActivity(), mGankDataList);
-        setPresenter(new GankPresenter(this));
-        mGankPresenter.getData();
+        mWeeklyDataList = new ArrayList<WeeklyData>();
+        mWeeklyRecyclerAdapter = new WeeklyRecyclerAdapter(getActivity(), mWeeklyDataList);
+        setPresenter(new WeeklyPresenter(this));
+        mWeeklyPresenter.getData();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_gank, container, false);
-
-        mCoordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.gank_container);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.gank_recyclerview);
+        View rootView = inflater.inflate(R.layout.fragment_weekly, container, false);
+        mCoordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.weekly_container);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.weekly_recyclerview);
+        mFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.weekly_fab);
         showRecyclerView();
-        refreshFAB = (FloatingActionButton) rootView.findViewById(R.id.gank_fab);
-        refreshFAB.setOnClickListener(new View.OnClickListener() {
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mGankDataList.clear();
-                mGankPresenter.getData();
+                mWeeklyDataList.clear();
+                mWeeklyPresenter.getData();
             }
         });
         return rootView;
@@ -75,34 +74,27 @@ public class GankFragment extends Fragment implements ItemClickListener, GankCon
     @Override
     public void onStop() {
         super.onStop();
-        mGankPresenter.disconnect();
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        Intent intent = new Intent(getActivity(), DetailActivity.class);
-        intent.putExtra("webUrl", mGankDataList.get(position).getUrl());
-        startActivity(intent);
+        mWeeklyPresenter.disconnect();
     }
 
     @Override
     public void showRecyclerView() {
-        mRecyclerView.setAdapter(mGankRecyclerAdapter);
+        mRecyclerView.setAdapter(mWeeklyRecyclerAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mGankRecyclerAdapter.setOnItemClickListener(this);
+        mWeeklyRecyclerAdapter.setOnItemClickListener(this);
     }
 
     @Override
     public void updateRecyclerView() {
-        mGankRecyclerAdapter.notifyDataSetChanged();
+        mWeeklyRecyclerAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void updateData(GankData.ResultsBean resultsBean) {
-        mGankDataList.add(resultsBean);
+    public void updateData(WeeklyData weeklyData) {
+        mWeeklyDataList.add(weeklyData);
     }
 
     @Override
@@ -116,7 +108,14 @@ public class GankFragment extends Fragment implements ItemClickListener, GankCon
     }
 
     @Override
-    public void setPresenter(GankContract.GankPresenter gankPresenter) {
-        mGankPresenter = gankPresenter;
+    public void setPresenter(WeeklyContract.WeeklyPresenter presenter) {
+        mWeeklyPresenter = presenter;
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra("webUrl", mWeeklyDataList.get(position).getUrl());
+        startActivity(intent);
     }
 }

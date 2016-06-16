@@ -6,4 +6,5 @@ package com.scnu.nita22.androidrss;
 
 public interface BasePresenter {
     void getData();
+    void disconnect();
 }

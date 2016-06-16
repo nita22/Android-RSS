@@ -10,11 +10,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpUtils {
 
-    private static final String BASE_URL = "http://gank.io/";
-
-    public static Retrofit initRetrofit() {
+    public static Retrofit initRetrofit(String url) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();

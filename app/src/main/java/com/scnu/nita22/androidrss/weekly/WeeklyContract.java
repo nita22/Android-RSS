@@ -1,23 +1,23 @@
-package com.scnu.nita22.androidrss.gank;
+package com.scnu.nita22.androidrss.weekly;
 
 import com.scnu.nita22.androidrss.BasePresenter;
 import com.scnu.nita22.androidrss.BaseView;
 
 /**
- * Created by nita22 on 2016/6/14.
+ * Created by nita22 on 2016/6/16.
  */
 
-public interface GankContract {
+public interface WeeklyContract {
 
-    interface GankView extends BaseView<GankPresenter> {
+    interface WeeklyView extends BaseView<WeeklyContract.WeeklyPresenter> {
         void showRecyclerView();
         void updateRecyclerView();
-        void updateData(GankData.ResultsBean resultsBean);
+        void updateData(WeeklyData weeklyData);
         void showFinishedSnackBar();
         void showErrorSnackBar();
     }
 
-    interface GankPresenter extends BasePresenter {
+    interface WeeklyPresenter extends BasePresenter {
         @Override
         void getData();
 

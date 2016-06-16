@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Android开发技术</string>
-    <string name="android">Android</string>
-    <string name="search">搜索</string>
+    <string name="gank">Gank</string>
+    <string name="weekly">周报</string>
     <string name="setting">设置</string>
     <string name="text">文本</string>
     <string name="error">无法加载内容</string>

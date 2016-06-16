@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Android RSS</string>
-    <string name="android">Android</string>
-    <string name="search">Search</string>
+    <string name="gank">Gank</string>
+    <string name="weekly">Weekly</string>
     <string name="setting">Setting</string>
     <string name="text">text</string>
     <string name="error">error</string>

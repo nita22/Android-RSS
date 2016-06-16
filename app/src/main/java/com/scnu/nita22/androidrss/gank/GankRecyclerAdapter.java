@@ -29,7 +29,7 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerViewHo
 
     @Override
     public GankRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View listView = LayoutInflater.from(mContext).inflate(R.layout.android_list_item,
+        View listView = LayoutInflater.from(mContext).inflate(R.layout.gank_list_item,
                 parent, false);
         GankRecyclerViewHolder mHolder = new GankRecyclerViewHolder(listView, mItemClickListener);
         return mHolder;
@@ -39,7 +39,7 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerViewHo
     public void onBindViewHolder(GankRecyclerViewHolder holder, int position) {
 
         holder.titleText.setText(mArrayList.get(position).getDesc());
-        holder.desText.setText(mArrayList.get(position).getType());
+        holder.authorText.setText(mArrayList.get(position).getWho());
         holder.dateText.setText(TimeUtils.getFormatTime(mArrayList.get(position).getPublishedAt()));
     }
 

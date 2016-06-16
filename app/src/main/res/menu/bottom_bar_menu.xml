@@ -4,12 +4,12 @@
     <item
         android:id="@+id/bar_android"
         android:icon="@drawable/ic_android_white_24dp"
-        android:title="@string/android"/>
+        android:title="@string/gank"/>
 
     <item
-        android:id="@+id/bar_search"
-        android:icon="@drawable/ic_search_white_24dp"
-        android:title="@string/search"/>
+        android:id="@+id/bar_weekly"
+        android:icon="@drawable/ic_event_white_24dp"
+        android:title="@string/weekly"/>
 
     <item
         android:id="@+id/bar_setting"

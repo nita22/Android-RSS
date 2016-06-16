@@ -11,10 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 import com.scnu.nita22.androidrss.gank.GankFragment;
+import com.scnu.nita22.androidrss.weekly.WeeklyFragment;
 
 import static com.scnu.nita22.androidrss.R.id.bar_android;
-import static com.scnu.nita22.androidrss.R.id.bar_search;
 import static com.scnu.nita22.androidrss.R.id.bar_setting;
+import static com.scnu.nita22.androidrss.R.id.bar_weekly;
 
 /**
  * Created by nita22 on 2016/6/12.
@@ -22,17 +23,19 @@ import static com.scnu.nita22.androidrss.R.id.bar_setting;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int BOTTOM_ITEM_TITLE_ANDROID_INDEX = 0;
-    private static final int BOTTOM_ITEM_TITLE_SEARCH_INDEX = 1;
+    private static final int BOTTOM_ITEM_TITLE_GANK_INDEX = 0;
+    private static final int BOTTOM_ITEM_TITLE_WEEKLY_INDEX = 1;
     private static final int BOTTOM_ITEM_TITLE_SETTING_INDEX = 2;
 
     private static int CURRENT_INDEX = 0;
-    private boolean mAndroidFragmentAdded = false;
+    private boolean mGankFragmentAdded = false;
+    private boolean mWeeklyFragmentAdded = false;
 
     private BottomBar mBottomBar;
 
     private FragmentManager mFragmentManager;
     private GankFragment mGankFragment;
+    private WeeklyFragment mWeeklyFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +56,10 @@ public class MainActivity extends AppCompatActivity {
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 switch (menuItemId) {
                     case bar_android:
-                        changeFragment(BOTTOM_ITEM_TITLE_ANDROID_INDEX);
+                        changeFragment(BOTTOM_ITEM_TITLE_GANK_INDEX);
                         break;
-                    case bar_search:
-                        changeFragment(BOTTOM_ITEM_TITLE_SEARCH_INDEX);
+                    case bar_weekly:
+                        changeFragment(BOTTOM_ITEM_TITLE_WEEKLY_INDEX);
                         break;
                     case bar_setting:
                         changeFragment(BOTTOM_ITEM_TITLE_SETTING_INDEX);
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItemId) {
                     case bar_android:
                         break;
-                    case bar_search:
+                    case bar_weekly:
                         break;
                     case bar_setting:
                         break;
@@ -80,32 +83,39 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        mBottomBar.mapColorForTab(BOTTOM_ITEM_TITLE_ANDROID_INDEX, ContextCompat.getColor(this, R.color.colorPrimary));
-        mBottomBar.mapColorForTab(BOTTOM_ITEM_TITLE_SEARCH_INDEX, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        mBottomBar.mapColorForTab(BOTTOM_ITEM_TITLE_GANK_INDEX, ContextCompat.getColor(this, R.color.colorPrimary));
+        mBottomBar.mapColorForTab(BOTTOM_ITEM_TITLE_WEEKLY_INDEX, ContextCompat.getColor(this, R.color.colorPrimaryDark));
         mBottomBar.mapColorForTab(BOTTOM_ITEM_TITLE_SETTING_INDEX, ContextCompat.getColor(this, R.color.colorAccent));
         mBottomBar.setActiveTabColor("#009688");
     }
 
     private void changeFragment(int i) {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        if (i == CURRENT_INDEX && (!mAndroidFragmentAdded)) {
-            fragmentTransaction.add(R.id.fragment_container, getFragment(BOTTOM_ITEM_TITLE_ANDROID_INDEX));
-            mAndroidFragmentAdded = true;
-            CURRENT_INDEX = BOTTOM_ITEM_TITLE_ANDROID_INDEX;
+        if (i == CURRENT_INDEX && (!mGankFragmentAdded)) {
+            fragmentTransaction.add(R.id.fragment_container, getFragment(BOTTOM_ITEM_TITLE_GANK_INDEX));
+            mGankFragmentAdded = true;
+            CURRENT_INDEX = BOTTOM_ITEM_TITLE_GANK_INDEX;
         } else {
             fragmentTransaction.hide(getFragment(CURRENT_INDEX));
 
             switch (i) {
-                case BOTTOM_ITEM_TITLE_ANDROID_INDEX:
-                    if (mAndroidFragmentAdded) {
-                        fragmentTransaction.show(getFragment(BOTTOM_ITEM_TITLE_ANDROID_INDEX));
+                case BOTTOM_ITEM_TITLE_GANK_INDEX:
+                    if (mGankFragmentAdded) {
+                        fragmentTransaction.show(getFragment(BOTTOM_ITEM_TITLE_GANK_INDEX));
                     } else {
-                        fragmentTransaction.add(R.id.fragment_container, getFragment(BOTTOM_ITEM_TITLE_ANDROID_INDEX));
-                        mAndroidFragmentAdded = true;
+                        fragmentTransaction.add(R.id.fragment_container, getFragment(BOTTOM_ITEM_TITLE_GANK_INDEX));
+                        mGankFragmentAdded = true;
                     }
-                    CURRENT_INDEX = BOTTOM_ITEM_TITLE_ANDROID_INDEX;
+                    CURRENT_INDEX = BOTTOM_ITEM_TITLE_GANK_INDEX;
                     break;
-                case BOTTOM_ITEM_TITLE_SEARCH_INDEX:
+                case BOTTOM_ITEM_TITLE_WEEKLY_INDEX:
+                    if (mWeeklyFragmentAdded) {
+                        fragmentTransaction.show(getFragment(BOTTOM_ITEM_TITLE_WEEKLY_INDEX));
+                    } else {
+                        fragmentTransaction.add(R.id.fragment_container, getFragment(BOTTOM_ITEM_TITLE_WEEKLY_INDEX));
+                        mWeeklyFragmentAdded = true;
+                    }
+                    CURRENT_INDEX = BOTTOM_ITEM_TITLE_WEEKLY_INDEX;
                     break;
                 case BOTTOM_ITEM_TITLE_SETTING_INDEX:
                     break;
@@ -116,13 +126,16 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment getFragment(int i) {
         switch (i) {
-            case BOTTOM_ITEM_TITLE_ANDROID_INDEX:
+            case BOTTOM_ITEM_TITLE_GANK_INDEX:
                 if (mGankFragment == null) {
                     mGankFragment = GankFragment.getInstance();
                 }
                 return mGankFragment;
-            case BOTTOM_ITEM_TITLE_SEARCH_INDEX:
-                break;
+            case BOTTOM_ITEM_TITLE_WEEKLY_INDEX:
+                if (mWeeklyFragment == null) {
+                    mWeeklyFragment = WeeklyFragment.getInstance();
+                }
+                return mWeeklyFragment;
             case BOTTOM_ITEM_TITLE_SETTING_INDEX:
                 break;
             default:

@@ -16,6 +16,10 @@ import rx.schedulers.Schedulers;
 public class GankPresenter implements GankContract.GankPresenter {
 
     private GankContract.GankView mGankView;
+    private static final String GANK_BASE_URL = "http://gank.io/";
+
+    private Observable<GankData> gankDataObservable;
+    private Subscriber<GankData.ResultsBean> mSubscriber;
 
     public GankPresenter(GankContract.GankView gankView) {
         mGankView = gankView;
@@ -23,9 +27,26 @@ public class GankPresenter implements GankContract.GankPresenter {
 
     @Override
     public void getData() {
-        Retrofit retrofit = HttpUtils.initRetrofit();
+        Retrofit retrofit = HttpUtils.initRetrofit(GANK_BASE_URL);
         GankService gankService = retrofit.create(GankService.class);
-        Observable<GankData> gankDataObservable = gankService.gankPost(100, 1);
+        gankDataObservable = gankService.gankPost(100, 1);
+        mSubscriber = new Subscriber<GankData.ResultsBean>() {
+            @Override
+            public void onCompleted() {
+                mGankView.updateRecyclerView();
+                mGankView.showFinishedSnackBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mGankView.showErrorSnackBar();
+            }
+
+            @Override
+            public void onNext(GankData.ResultsBean resultsBean) {
+                mGankView.updateData(resultsBean);
+            }
+        };
         gankDataObservable
                 .flatMap(new Func1<GankData, Observable<GankData.ResultsBean>>() {
                     @Override
@@ -41,22 +62,13 @@ public class GankPresenter implements GankContract.GankPresenter {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GankData.ResultsBean>() {
-                    @Override
-                    public void onCompleted() {
-                        mGankView.updateList();
-                        mGankView.showfinishedSnackBar();
-                    }
+                .subscribe(mSubscriber);
+    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mGankView.showErrorSnackBar();
-                    }
-
-                    @Override
-                    public void onNext(GankData.ResultsBean resultsBean) {
-                        mGankView.updateData(resultsBean);
-                    }
-                });
+    @Override
+    public void disconnect() {
+        if (!mSubscriber.isUnsubscribed()) {
+            mSubscriber.unsubscribe();
+        }
     }
 }
