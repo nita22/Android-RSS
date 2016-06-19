@@ -6,4 +6,5 @@
     <string name="text">text</string>
     <string name="error">error</string>
     <string name="finished">load finished</string>
+    <string name="published">published</string>
 </resources>

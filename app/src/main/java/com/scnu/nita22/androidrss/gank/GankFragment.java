@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.scnu.nita22.androidrss.DetailActivity;
 import com.scnu.nita22.androidrss.R;
 import com.scnu.nita22.androidrss.util.ItemClickListener;
@@ -32,6 +33,7 @@ public class GankFragment extends Fragment implements ItemClickListener, GankCon
     private GankRecyclerAdapter mGankRecyclerAdapter;
     private List<GankData.ResultsBean> mGankDataList;
     private FloatingActionButton refreshFAB;
+    private CircleProgressBar mCircleProgressBar;
 
     private GankContract.GankPresenter mGankPresenter;
 
@@ -50,7 +52,6 @@ public class GankFragment extends Fragment implements ItemClickListener, GankCon
         mGankDataList = new ArrayList<GankData.ResultsBean>();
         mGankRecyclerAdapter = new GankRecyclerAdapter(getActivity(), mGankDataList);
         setPresenter(new GankPresenter(this));
-        mGankPresenter.getData();
     }
 
     @Nullable
@@ -59,8 +60,14 @@ public class GankFragment extends Fragment implements ItemClickListener, GankCon
         View rootView = inflater.inflate(R.layout.fragment_gank, container, false);
 
         mCoordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.gank_container);
+
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.gank_recyclerview);
         showRecyclerView();
+
+        mCircleProgressBar = (CircleProgressBar) rootView.findViewById(R.id.gank_progressBar);
+        mCircleProgressBar.setCircleBackgroundEnabled(false);
+        mGankPresenter.getData();
+
         refreshFAB = (FloatingActionButton) rootView.findViewById(R.id.gank_fab);
         refreshFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +120,17 @@ public class GankFragment extends Fragment implements ItemClickListener, GankCon
     @Override
     public void showErrorSnackBar() {
         Snackbar.make(mCoordinatorLayout, R.string.error, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showProgressBar() {
+        mCircleProgressBar.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void hideProgressBar() {
+        mCircleProgressBar.setVisibility(View.GONE);
     }
 
     @Override

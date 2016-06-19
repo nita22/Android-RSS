@@ -36,7 +36,7 @@ public class WeeklyRecyclerAdapter extends RecyclerView.Adapter<WeeklyRecyclerVi
     @Override
     public void onBindViewHolder(WeeklyRecyclerViewHolder holder, int position) {
         holder.titleText.setText(mArrayList.get(position).getTitle());
-        holder.dateText.setText(mArrayList.get(position).getPublishTime());
+        holder.dateText.setText(mArrayList.get(position).getPublishTime() + mContext.getResources().getString(R.string.published));
     }
 
     @Override

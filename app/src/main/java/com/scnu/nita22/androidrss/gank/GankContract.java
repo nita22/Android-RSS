@@ -11,10 +11,18 @@ public interface GankContract {
 
     interface GankView extends BaseView<GankPresenter> {
         void showRecyclerView();
+
         void updateRecyclerView();
+
         void updateData(GankData.ResultsBean resultsBean);
+
         void showFinishedSnackBar();
+
         void showErrorSnackBar();
+
+        void showProgressBar();
+
+        void hideProgressBar();
     }
 
     interface GankPresenter extends BasePresenter {

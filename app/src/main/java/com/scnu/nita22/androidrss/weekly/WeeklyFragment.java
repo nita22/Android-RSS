@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.scnu.nita22.androidrss.DetailActivity;
 import com.scnu.nita22.androidrss.R;
 import com.scnu.nita22.androidrss.util.ItemClickListener;
@@ -34,6 +35,7 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
     private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFloatingActionButton;
+    private CircleProgressBar mCircleProgressBar;
 
     public static WeeklyFragment mWeeklyFragment;
 
@@ -50,7 +52,6 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
         mWeeklyDataList = new ArrayList<WeeklyData>();
         mWeeklyRecyclerAdapter = new WeeklyRecyclerAdapter(getActivity(), mWeeklyDataList);
         setPresenter(new WeeklyPresenter(this));
-        mWeeklyPresenter.getData();
     }
 
     @Nullable
@@ -59,8 +60,12 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
         View rootView = inflater.inflate(R.layout.fragment_weekly, container, false);
         mCoordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.weekly_container);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.weekly_recyclerview);
-        mFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.weekly_fab);
         showRecyclerView();
+        mCircleProgressBar = (CircleProgressBar) rootView.findViewById(R.id.weekly_progressBar);
+        mCircleProgressBar.setCircleBackgroundEnabled(false);
+        mWeeklyPresenter.getData();
+
+        mFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.weekly_fab);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +110,16 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
     @Override
     public void showErrorSnackBar() {
         Snackbar.make(mCoordinatorLayout, R.string.error, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showProgressBar() {
+        mCircleProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        mCircleProgressBar.setVisibility(View.GONE);
     }
 
     @Override

@@ -27,6 +27,7 @@ public class GankPresenter implements GankContract.GankPresenter {
 
     @Override
     public void getData() {
+        mGankView.showProgressBar();
         Retrofit retrofit = HttpUtils.initRetrofit(GANK_BASE_URL);
         GankService gankService = retrofit.create(GankService.class);
         gankDataObservable = gankService.gankPost(100, 1);
@@ -34,11 +35,13 @@ public class GankPresenter implements GankContract.GankPresenter {
             @Override
             public void onCompleted() {
                 mGankView.updateRecyclerView();
+                mGankView.hideProgressBar();
                 mGankView.showFinishedSnackBar();
             }
 
             @Override
             public void onError(Throwable e) {
+                mGankView.hideProgressBar();
                 mGankView.showErrorSnackBar();
             }
 

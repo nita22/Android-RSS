@@ -6,6 +6,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -23,6 +26,8 @@ public class WeeklyPresenter implements WeeklyContract.WeeklyPresenter {
     private WeeklyContract.WeeklyView mWeeklyView;
     private Observable<WeeklyData> observable;
     private Subscriber<WeeklyData> subscriber;
+    private ArrayList<String> dateList = new ArrayList<String>();
+    private int pageNumber = 1;
 
     public WeeklyPresenter(WeeklyContract.WeeklyView weeklyView) {
         mWeeklyView = weeklyView;
@@ -30,23 +35,35 @@ public class WeeklyPresenter implements WeeklyContract.WeeklyPresenter {
 
     @Override
     public void getData() {
+        mWeeklyView.showProgressBar();
         observable = Observable.create(new Observable.OnSubscribe<WeeklyData>() {
             @Override
             public void call(Subscriber<? super WeeklyData> subscriber) {
-                Document doc = null;//通过url获取到网页内容
-                try {
-                    doc = Jsoup.connect(WEEKLY_BASE_URL).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                getPageNumber();
+                dateList.clear();
+                int j = 0;
+                for (int k = 1; k <= pageNumber; k++) {
+                    Document doc = null;//通过url获取到网页内容
+                    String webUrl = WEEKLY_BASE_URL + "/page/" + k;
+                    try {
+                        doc = Jsoup.connect(webUrl).get();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Elements dateElements = doc.getElementsByClass("post-date");
+                    for (Element e : dateElements) {
+                        String date = e.text();
+                        dateList.add(date);
+                    }
 
-                Elements elements = doc.getElementsByClass("post-title");//查找所有class为"link_title"的元素
-                for (Element e : elements) {
-                    Elements titles = e.getElementsByTag("a");//在每一个找到的元素中，查找<a>标签
-                    for (Element title : titles) {
+                    Elements titleElements = doc.getElementsByClass("post-title");
+                    for (Element e : titleElements) {
+                        Elements title = e.getElementsByTag("a");//在每一个找到的元素中，查找<a>标签
                         WeeklyData weeklyData = new WeeklyData();
-                        weeklyData.setTitle(title.text());
+                        weeklyData.setTitle(e.text());
                         weeklyData.setUrl(WEEKLY_BASE_URL + title.attr("href"));
+                        weeklyData.setPublishTime(dateList.get(j));
+                        j++;
                         subscriber.onNext(weeklyData);
                     }
                 }
@@ -57,11 +74,13 @@ public class WeeklyPresenter implements WeeklyContract.WeeklyPresenter {
             @Override
             public void onCompleted() {
                 mWeeklyView.updateRecyclerView();
+                mWeeklyView.hideProgressBar();
                 mWeeklyView.showFinishedSnackBar();
             }
 
             @Override
             public void onError(Throwable e) {
+                mWeeklyView.hideProgressBar();
                 mWeeklyView.showErrorSnackBar();
             }
 
@@ -73,6 +92,28 @@ public class WeeklyPresenter implements WeeklyContract.WeeklyPresenter {
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
+
+    public void getPageNumber() {
+        Document doc = null;//通过url获取到网页内容
+        try {
+            doc = Jsoup.connect(WEEKLY_BASE_URL).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Elements pageElements = doc.getElementsByClass("page-number");
+        String pageText = pageElements.text();
+        Pattern p = Pattern.compile("(\\d+)");
+        Matcher m = p.matcher(pageText);
+        int i = 0;
+        while (m.find()) {
+            if (!"".equals(m.group())) {
+                if (i == 1) {
+                    pageNumber = Integer.parseInt(m.group());
+                }
+                i++;
+            }
+        }
     }
 
     @Override

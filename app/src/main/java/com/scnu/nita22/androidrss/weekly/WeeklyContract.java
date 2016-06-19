@@ -11,10 +11,18 @@ public interface WeeklyContract {
 
     interface WeeklyView extends BaseView<WeeklyContract.WeeklyPresenter> {
         void showRecyclerView();
+
         void updateRecyclerView();
+
         void updateData(WeeklyData weeklyData);
+
         void showFinishedSnackBar();
+
         void showErrorSnackBar();
+
+        void showProgressBar();
+
+        void hideProgressBar();
     }
 
     interface WeeklyPresenter extends BasePresenter {
