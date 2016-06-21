@@ -39,7 +39,7 @@ public class GankFragment extends Fragment implements ItemClickListener, GankCon
 
     public static GankFragment mGankFragment;
 
-    public static GankFragment getInstance() {
+    public static GankFragment newInstance() {
         if (mGankFragment == null) {
             mGankFragment = new GankFragment();
         }

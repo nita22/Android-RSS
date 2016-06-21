@@ -39,7 +39,7 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
 
     public static WeeklyFragment mWeeklyFragment;
 
-    public static WeeklyFragment getInstance() {
+    public static WeeklyFragment newInstance() {
         if (mWeeklyFragment == null) {
             mWeeklyFragment = new WeeklyFragment();
         }

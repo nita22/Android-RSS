@@ -2,9 +2,18 @@
     <string name="app_name">Android RSS</string>
     <string name="gank">Gank</string>
     <string name="weekly">Weekly</string>
-    <string name="setting">Setting</string>
+    <string name="info">Info</string>
     <string name="text">text</string>
-    <string name="error">error</string>
-    <string name="finished">load finished</string>
-    <string name="published">published</string>
+    <string name="error">Error</string>
+    <string name="finished">Load finished</string>
+    <string name="published">Published</string>
+    <string name="version_name">Beta1</string>
+    <string name="version">Version</string>
+    <string name="author">Author</string>
+    <string name="author_name">Situ Deyao</string>
+    <string name="location">Guangdong, China</string>
+    <string name="source">Visit on Github</string>
+    <string name="thanks">Thanks</string>
+    <string name="close">close</string>
+
 </resources>

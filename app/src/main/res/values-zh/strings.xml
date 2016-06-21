@@ -2,9 +2,18 @@
     <string name="app_name">Android开发技术</string>
     <string name="gank">Gank</string>
     <string name="weekly">周报</string>
-    <string name="setting">设置</string>
+    <string name="info">关于</string>
     <string name="text">文本</string>
     <string name="error">无法加载内容</string>
     <string name="finished">加载完成</string>
     <string name="published">发布</string>
+    <string name="version_name">beta1</string>
+    <string name="version">版本</string>
+    <string name="author">作者</string>
+    <string name="author_name">司徒德耀</string>
+    <string name="location">广州市，中国</string>
+    <string name="source">访问Github地址</string>
+    <string name="thanks">鸣谢</string>
+    <string name="close">关闭</string>
+
 </resources>
