@@ -14,19 +14,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.scnu.nita22.androidrss.DetailActivity;
 import com.scnu.nita22.androidrss.R;
-import com.scnu.nita22.androidrss.util.ItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by nita22 on 2016/6/12.
+ * Edited by nita22 on 2016/6/27.
  */
 
-public class GankFragment extends Fragment implements ItemClickListener, GankContract.GankView {
+public class GankFragment extends Fragment implements GankContract.GankView {
 
     private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView mRecyclerView;
@@ -50,7 +51,6 @@ public class GankFragment extends Fragment implements ItemClickListener, GankCon
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGankDataList = new ArrayList<GankData.ResultsBean>();
-        mGankRecyclerAdapter = new GankRecyclerAdapter(getActivity(), mGankDataList);
         setPresenter(new GankPresenter(this));
     }
 
@@ -86,20 +86,21 @@ public class GankFragment extends Fragment implements ItemClickListener, GankCon
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-        Intent intent = new Intent(getActivity(), DetailActivity.class);
-        intent.putExtra("webUrl", mGankDataList.get(position).getUrl());
-        startActivity(intent);
-    }
-
-    @Override
     public void showRecyclerView() {
+        mGankRecyclerAdapter = new GankRecyclerAdapter(mGankDataList);
         mRecyclerView.setAdapter(mGankRecyclerAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mGankRecyclerAdapter.setOnItemClickListener(this);
+        mGankRecyclerAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int i) {
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("webUrl", mGankDataList.get(i).getUrl());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

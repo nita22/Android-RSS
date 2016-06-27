@@ -14,19 +14,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.scnu.nita22.androidrss.DetailActivity;
 import com.scnu.nita22.androidrss.R;
-import com.scnu.nita22.androidrss.util.ItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by nita22 on 2016/6/15.
+ * Edited by nita22 on 2016/6/27.
  */
 
-public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyView, ItemClickListener {
+public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyView {
 
     private WeeklyContract.WeeklyPresenter mWeeklyPresenter;
     private List<WeeklyData> mWeeklyDataList;
@@ -50,7 +51,6 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mWeeklyDataList = new ArrayList<WeeklyData>();
-        mWeeklyRecyclerAdapter = new WeeklyRecyclerAdapter(getActivity(), mWeeklyDataList);
         setPresenter(new WeeklyPresenter(this));
     }
 
@@ -84,12 +84,20 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
 
     @Override
     public void showRecyclerView() {
+        mWeeklyRecyclerAdapter = new WeeklyRecyclerAdapter(mWeeklyDataList);
         mRecyclerView.setAdapter(mWeeklyRecyclerAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mWeeklyRecyclerAdapter.setOnItemClickListener(this);
+        mWeeklyRecyclerAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int i) {
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("webUrl", mWeeklyDataList.get(i).getUrl());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -125,12 +133,5 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
     @Override
     public void setPresenter(WeeklyContract.WeeklyPresenter presenter) {
         mWeeklyPresenter = presenter;
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        Intent intent = new Intent(getActivity(), DetailActivity.class);
-        intent.putExtra("webUrl", mWeeklyDataList.get(position).getUrl());
-        startActivity(intent);
     }
 }
