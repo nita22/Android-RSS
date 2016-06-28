@@ -16,7 +16,6 @@ import rx.schedulers.Schedulers;
 public class GankPresenter implements GankContract.GankPresenter {
 
     private GankContract.GankView mGankView;
-    private static final String GANK_BASE_URL = "http://gank.io/";
 
     private Observable<GankData> gankDataObservable;
     private Subscriber<GankData.ResultsBean> mSubscriber;
@@ -26,9 +25,9 @@ public class GankPresenter implements GankContract.GankPresenter {
     }
 
     @Override
-    public void getData() {
+    public void getData(String webUrl) {
         mGankView.showProgressBar();
-        Retrofit retrofit = HttpUtils.initRetrofit(GANK_BASE_URL);
+        Retrofit retrofit = HttpUtils.initRetrofit(webUrl);
         GankService gankService = retrofit.create(GankService.class);
         gankDataObservable = gankService.gankPost(100, 1);
         mSubscriber = new Subscriber<GankData.ResultsBean>() {

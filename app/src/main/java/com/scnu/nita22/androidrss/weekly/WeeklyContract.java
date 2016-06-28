@@ -16,6 +16,8 @@ public interface WeeklyContract {
 
         void updateData(WeeklyData weeklyData);
 
+        void updatePageNumber(int pageNumber);
+
         void showFinishedSnackBar();
 
         void showErrorSnackBar();
@@ -27,9 +29,11 @@ public interface WeeklyContract {
 
     interface WeeklyPresenter extends BasePresenter {
         @Override
-        void getData();
+        void getData(String webUrl);
 
         @Override
         void disconnect();
+
+        void getPageNumber(String webUrl);
     }
 }

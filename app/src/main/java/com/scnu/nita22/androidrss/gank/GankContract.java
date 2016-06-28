@@ -27,7 +27,7 @@ public interface GankContract {
 
     interface GankPresenter extends BasePresenter {
         @Override
-        void getData();
+        void getData(String webUrl);
 
         @Override
         void disconnect();

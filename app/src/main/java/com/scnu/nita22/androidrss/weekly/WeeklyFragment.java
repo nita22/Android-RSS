@@ -2,6 +2,7 @@ package com.scnu.nita22.androidrss.weekly;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -27,7 +28,14 @@ import java.util.List;
  * Edited by nita22 on 2016/6/27.
  */
 
-public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyView {
+public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyView, BaseQuickAdapter.RequestLoadMoreListener {
+
+    private static final String WEEKLY_BASE_URL = "http://www.androidweekly.cn";
+
+    private int currentPageNumber = 1;
+    private int pageNumber = 1;
+
+    private int delayMillis = 1000;
 
     private WeeklyContract.WeeklyPresenter mWeeklyPresenter;
     private List<WeeklyData> mWeeklyDataList;
@@ -63,14 +71,19 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
         showRecyclerView();
         mCircleProgressBar = (CircleProgressBar) rootView.findViewById(R.id.weekly_progressBar);
         mCircleProgressBar.setCircleBackgroundEnabled(false);
-        mWeeklyPresenter.getData();
+        mCircleProgressBar.setVisibility(View.VISIBLE);
+        mWeeklyPresenter.getPageNumber(WEEKLY_BASE_URL);
+        mWeeklyPresenter.getData(WEEKLY_BASE_URL);
 
         mFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.weekly_fab);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mWeeklyDataList.clear();
-                mWeeklyPresenter.getData();
+                currentPageNumber = 1;
+                mWeeklyRecyclerAdapter.setNewData(mWeeklyDataList);
+                mWeeklyRecyclerAdapter.openLoadMore(10, true);
+                mWeeklyPresenter.getData(WEEKLY_BASE_URL);
             }
         });
         return rootView;
@@ -98,6 +111,8 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
                 startActivity(intent);
             }
         });
+        mWeeklyRecyclerAdapter.setOnLoadMoreListener(this);
+        mWeeklyRecyclerAdapter.openLoadMore(10, true);
     }
 
     @Override
@@ -108,6 +123,11 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
     @Override
     public void updateData(WeeklyData weeklyData) {
         mWeeklyDataList.add(weeklyData);
+    }
+
+    @Override
+    public void updatePageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
     }
 
     @Override
@@ -133,5 +153,29 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
     @Override
     public void setPresenter(WeeklyContract.WeeklyPresenter presenter) {
         mWeeklyPresenter = presenter;
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (currentPageNumber >= pageNumber) {
+                    mWeeklyRecyclerAdapter.notifyDataChangedAfterLoadMore(false);
+                    View view = getActivity().getLayoutInflater().inflate(R.layout.not_loading, (ViewGroup) mRecyclerView.getParent(), false);
+                    mWeeklyRecyclerAdapter.addFooterView(view);
+                } else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mWeeklyRecyclerAdapter.notifyDataChangedAfterLoadMore(true);
+                            String webUrl = WEEKLY_BASE_URL + "/page/" + (currentPageNumber + 1);
+                            mWeeklyPresenter.getData(webUrl);
+                            currentPageNumber++;
+                        }
+                    }, delayMillis);
+                }
+            }
+        });
     }
 }

@@ -29,6 +29,8 @@ import java.util.List;
 
 public class GankFragment extends Fragment implements GankContract.GankView {
 
+    private static final String GANK_BASE_URL = "http://gank.io/";
+
     private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView mRecyclerView;
     private GankRecyclerAdapter mGankRecyclerAdapter;
@@ -66,14 +68,14 @@ public class GankFragment extends Fragment implements GankContract.GankView {
 
         mCircleProgressBar = (CircleProgressBar) rootView.findViewById(R.id.gank_progressBar);
         mCircleProgressBar.setCircleBackgroundEnabled(false);
-        mGankPresenter.getData();
+        mGankPresenter.getData(GANK_BASE_URL);
 
         refreshFAB = (FloatingActionButton) rootView.findViewById(R.id.gank_fab);
         refreshFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mGankDataList.clear();
-                mGankPresenter.getData();
+                mGankPresenter.getData(GANK_BASE_URL);
             }
         });
         return rootView;
