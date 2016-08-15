@@ -30,9 +30,9 @@ import java.util.List;
 
 public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyView, BaseQuickAdapter.RequestLoadMoreListener {
 
-    private static final String WEEKLY_BASE_URL = "http://www.androidweekly.cn";
+    public static final String WEEKLY_BASE_URL = "http://www.androidweekly.cn";
 
-    private int currentPageNumber = 1;
+    private int currentPageNumber = 0;
     private int pageNumber = 1;
 
     private int delayMillis = 1000;
@@ -72,6 +72,7 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
         mCircleProgressBar = (CircleProgressBar) rootView.findViewById(R.id.weekly_progressBar);
         mCircleProgressBar.setCircleBackgroundEnabled(false);
         mCircleProgressBar.setVisibility(View.VISIBLE);
+
         mWeeklyPresenter.getPageNumber(WEEKLY_BASE_URL);
         mWeeklyPresenter.getData(WEEKLY_BASE_URL);
 
@@ -80,9 +81,9 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
             @Override
             public void onClick(View v) {
                 mWeeklyDataList.clear();
-                currentPageNumber = 1;
+                currentPageNumber = 0;
                 mWeeklyRecyclerAdapter.setNewData(mWeeklyDataList);
-                mWeeklyRecyclerAdapter.openLoadMore(10, true);
+                mWeeklyRecyclerAdapter.openLoadMore(9, true);
                 mWeeklyPresenter.getData(WEEKLY_BASE_URL);
             }
         });
@@ -112,12 +113,13 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
             }
         });
         mWeeklyRecyclerAdapter.setOnLoadMoreListener(this);
-        mWeeklyRecyclerAdapter.openLoadMore(10, true);
+        mWeeklyRecyclerAdapter.openLoadMore(9, true);
     }
 
     @Override
     public void updateRecyclerView() {
         mWeeklyRecyclerAdapter.notifyDataSetChanged();
+        currentPageNumber++;
     }
 
     @Override
@@ -141,11 +143,6 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
     }
 
     @Override
-    public void showProgressBar() {
-        mCircleProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
     public void hideProgressBar() {
         mCircleProgressBar.setVisibility(View.GONE);
     }
@@ -156,14 +153,14 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
     }
 
     @Override
-    public void onLoadMoreRequested() {
+    public synchronized void onLoadMoreRequested() {
         mRecyclerView.post(new Runnable() {
             @Override
             public void run() {
                 if (currentPageNumber >= pageNumber) {
                     mWeeklyRecyclerAdapter.notifyDataChangedAfterLoadMore(false);
-                    View view = getActivity().getLayoutInflater().inflate(R.layout.not_loading, (ViewGroup) mRecyclerView.getParent(), false);
-                    mWeeklyRecyclerAdapter.addFooterView(view);
+                    View footView = getActivity().getLayoutInflater().inflate(R.layout.not_loading, (ViewGroup) mRecyclerView.getParent(), false);
+                    mWeeklyRecyclerAdapter.addFooterView(footView);
                 } else {
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -171,7 +168,6 @@ public class WeeklyFragment extends Fragment implements WeeklyContract.WeeklyVie
                             mWeeklyRecyclerAdapter.notifyDataChangedAfterLoadMore(true);
                             String webUrl = WEEKLY_BASE_URL + "/page/" + (currentPageNumber + 1);
                             mWeeklyPresenter.getData(webUrl);
-                            currentPageNumber++;
                         }
                     }, delayMillis);
                 }

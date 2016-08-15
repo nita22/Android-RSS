@@ -19,8 +19,8 @@ public class WeeklyRecyclerAdapter extends BaseQuickAdapter<WeeklyData> {
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, WeeklyData weeklyData) {
-        baseViewHolder.setText(R.id.weekly_title,weeklyData.getTitle());
-        baseViewHolder.setText(R.id.weekly_date,weeklyData.getPublishTime()+"发布");
+        baseViewHolder.setText(R.id.weekly_title, weeklyData.getTitle());
+        baseViewHolder.setText(R.id.weekly_date, weeklyData.getPublishTime());
     }
 
 

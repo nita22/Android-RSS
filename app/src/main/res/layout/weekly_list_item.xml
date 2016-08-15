@@ -22,18 +22,30 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="12dp"
-            android:maxLines="1"
+            android:maxLines="3"
             android:text="TextView"
             android:textSize="16sp"/>
 
-        <TextView
-            android:id="@+id/weekly_date"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginLeft="12dp"
-            android:text="TextView"
-            android:textSize="14sp"/>
+            android:layout_marginLeft="12dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_schedule_black_18dp"/>
+
+            <TextView
+                android:id="@+id/weekly_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:text="TextView"
+                android:textSize="14sp"/>
+        </LinearLayout>
 
     </LinearLayout>
 

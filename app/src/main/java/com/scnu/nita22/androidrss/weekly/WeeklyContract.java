@@ -22,8 +22,6 @@ public interface WeeklyContract {
 
         void showErrorSnackBar();
 
-        void showProgressBar();
-
         void hideProgressBar();
     }
 

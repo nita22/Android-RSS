@@ -15,14 +15,14 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.scnu.nita22.androidrss.weekly.WeeklyFragment.WEEKLY_BASE_URL;
+
 /**
  * Created by nita22 on 2016/6/16.
  * Edited by nita22 on 2016/6/28.
  */
 
 public class WeeklyPresenter implements WeeklyContract.WeeklyPresenter {
-
-    private static final String WEEKLY_BASE_URL = "http://www.androidweekly.cn";
 
     private WeeklyContract.WeeklyView mWeeklyView;
     private Observable<WeeklyData> observable;
@@ -46,13 +46,13 @@ public class WeeklyPresenter implements WeeklyContract.WeeklyPresenter {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Elements dateElements = doc.getElementsByClass("post-date");
+                Elements dateElements = doc.getElementsByClass("date");
                 for (Element e : dateElements) {
-                    String date = e.text();
+                    String date = e.ownText();
                     dateList.add(date);
                 }
 
-                Elements titleElements = doc.getElementsByClass("post-title");
+                Elements titleElements = doc.select(".h4").select(".title");
                 for (Element e : titleElements) {
                     Elements title = e.getElementsByTag("a");//在每一个找到的元素中，查找<a>标签
                     WeeklyData weeklyData = new WeeklyData();
